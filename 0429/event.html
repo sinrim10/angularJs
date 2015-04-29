@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../libs/angular.js"></script>
+    <style type="text/css">
+        .box{
+            width: 100px;
+            height: 60px;
+            margin: 10px;
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding-top: 40px;
+
+        }
+    </style>
+    <script>
+        function mainCtrl($scope){
+            $scope.message = "";
+            $scope.eventCnt = 0;
+            $scope.inputText = '가나다라마바사';
+            $scope.handleEvt = function (msg){
+                $scope.message = msg;
+                $scope.eventCnt++;
+            }
+        }
+    </script>
+</head>
+
+<body ng-controller="mainCtrl">
+    <div>
+        <div class="box" ng-click="handleEvt('박스가 클릭됬다.')">click</div>
+        <div class="box" ng-mousedown="handleEvt('박스 mouseDown')">mouseDown</div>
+        <div class="box" ng-mouseover="handleEvt('박스 mouseOver')">mouseOver</div>
+        <div class="box" ng-mousemove="handleEvt('박스 mouseMove')">mouseMove</div>
+        <div class="box" ng-mousedown="handleEvt('박스 mouseDown')">mouseDown</div>
+        <div class="box" ng-mouseenter="handleEvt('박스 mouseEnter')">mouseEnter</div>
+        change : <input type="text" ng-model="inputText" ng-change="handleEvt('입력 박스의 값이 변경되었다.')">
+        keyDown : <input type="text" ng-model='inputText2' ng-keydown="handleEvt($event.keyCode+'키코드 눌러짐')">
+     </div>
+    <div>
+        <p>{{message}} {{eventCnt}}</p>
+        <p>{{inputText}} </p>
+    </div>
+</body>
+</html>

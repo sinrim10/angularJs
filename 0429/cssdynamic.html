@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../libs/angular.js"></script>
+    <style type="text/css">
+        .apple{ background-color: red}
+        .lemon{ background-color: yellow;}
+        .even{ background-color: blue}
+    </style>
+</head>
+<script>
+    function mainCtrl($scope){
+        $scope.colorList = ['red' ,'blue','yellow','green','purple']
+        $scope.bgStyle = {
+            'backgroundColor':'blue'
+        };
+        $scope.changeColor = function(color){
+            $scope.bgStyle.backgroundColor = color;
+        }
+    }
+</script>
+<body>
+    <div ng-init="fruitList = ['apple','banana','tomato','lemon','grape']">
+        <ul>
+            <li ng-repeat="fruit in fruitList" ng-class="'{{fruit}}'">
+                {{fruit}}
+            </li>
+        </ul>
+        <ul>
+            <li ng-repeat="fruit in fruitList" ng-class="{'even':{{$index%2==0}}}">
+                {{fruit}}
+            </li>
+        </ul>
+    </div>
+    <div ng-controller="mainCtrl">
+        <div ng-style="bgStyle">{{bgStyle.backgroundColor}}</div>
+        <select ng-model="color" ng-options="colorList for colorList in colorList ">
+            <option value="">선택 해 주세요</option>
+        </select>
+        <input type="button"  ng-click="changeColor(color)"  value="색 변경">
+    </div>
+</body>
+</html>

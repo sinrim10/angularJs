@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html ng-app>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../libs/angular.js"></script>
+    <style type="text/css">
+        .ng-scope{border: 1px solid red;padding: 5px}
+        .msg-list-area{ margin: 10px; height: 400px;border: 1px solid black}
+    </style>
+</head>
+<script>
+    function mainCtrl($scope){
+        $scope.broadcast = function (noticeMsg){
+            $scope.$broadcast("chat:noticeMsg",noticeMsg);
+            $scope.noticeMsg = "";
+        }
+        $scope.$on("chat:newMsg",function(e,value){
+            console.log(value);
+            console.log(e);
+        })
+    }
+
+    function chatMsgListCtrl($scope,$rootScope){
+        //$rootScope 는 같은 레벨에 있는 컨트롤러의 변수를 읽기 위해선 최상위 scope를 호출해야한다.
+        $scope.msgList = [];
+        $rootScope.$on("chat:newMsg",function(e,newMsg){
+            //on은 이벤트를 감지하고 있다가 emit 이나 broadcast의 이벤트가 호출되면 실행한다.
+            $scope.msgList.push(newMsg);
+        });
+
+        $scope.$on("chat:noticeMsg", function(e,noticeMsg){
+                if(noticeMsg != 'undefined' || noticeMsg !="") {
+                    $scope.msgList.push("[공지] " + noticeMsg);
+                }
+
+        });
+    }
+
+    function chatMsgInputCtrl($scope){
+        $scope.submit = function(newMsg){
+            $scope.$emit("chat:newMsg",newMsg);
+            //emit 은 본인 Scope 의 상위 스코프로 객체를 전달한다.
+            $scope.newMsg = "";
+        }
+    }
+</script>
+<body ng-controller="mainCtrl">
+    <input type="text" ng-model="noticeMsg">
+    <input type="button" value="공지 전송" ng-click="broadcast(noticeMsg)">
+    <div class="msg-list-area" ng-controller="chatMsgListCtrl">
+        <ul>
+            <li ng-repeat="msg in msgList track by $index">{{msg}}</li>
+        </ul>
+    </div>
+    <div ng-controller="chatMsgInputCtrl">
+        <input type="text" ng-model="newMsg">
+        <input type="button" value="전송" ng-click="submit(newMsg)">
+    </div>
+
+</body>
+<!-- mainCtrl -> chatMsgListCtrl = chatMsgInputCtrl  최고 부모는 mainCtrl 이고 자식은 chatMsgInputCtrl , chatMsgListCtrl 이면서 서로 같은 레벨에 있다..-->
+</html>
