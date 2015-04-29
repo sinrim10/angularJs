@@ -11,6 +11,7 @@
 </head>
 <script>
     function mainCtrl($scope){
+        $scope.noticeMsg = "";
         $scope.broadcast = function (noticeMsg){
             $scope.$broadcast("chat:noticeMsg",noticeMsg);
             $scope.noticeMsg = "";
@@ -30,7 +31,9 @@
         });
 
         $scope.$on("chat:noticeMsg", function(e,noticeMsg){
-                if(noticeMsg != 'undefined' || noticeMsg !="") {
+                if(noticeMsg == 'undefined' || noticeMsg =="") {
+
+                }else{
                     $scope.msgList.push("[공지] " + noticeMsg);
                 }
 
