@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../libs/angular.js"></script>
+</head>
+<script>
+    var countryLists = [{name : "한국",code:"KR", continent:"아시아"},
+        {name : "일본",code:"JP", continent:"아시아"},
+        {name : "미국",code:"EN", continent:"북미"},
+        {name : "중국",code:"CN", continent:"아시아"}]
+    function mainCtrl($scope){
+        $scope.countryLists = countryLists;
+    }
+
+</script>
+<body>
+    <div ng-controller="mainCtrl">
+        <form name="sampleForm">
+            <div>출발 국가 :
+                <select ng-model="depCountry" ng-options="country.name for country in countryLists" ng-required="true">
+                    <option value="">선택하여 주세요</option>
+                </select>
+            </div>
+            <div>경유 국가 :
+                <select ng-model="viaCountry" ng-options="country.name as country.name for country in countryLists">
+                    <option value="">선택하여 주세요</option>
+                </select>
+            </div>
+            <div>도착 국가 :
+                <select ng-model="arrCountry" ng-options="country.name group by country.continent for country in countryLists" ng-required="true">
+                    <option value="">선택하여 주세요</option>
+                </select>
+            </div>
+        </form>
+        <div>
+            <p>출발 국가: {{depCountry.name}}</p>
+            <p>경유 국가: {{viaCountry}}</p>
+            <p>도착 국가: {{arrCountry.name}}</p>
+        </div>
+        <div ng-show="sampleForm.$invalid">
+            <h2>출발 국가와 도착 국가는 필히 선택해주세요</h2>
+        </div>
+    </div>
+</body>
+</html>

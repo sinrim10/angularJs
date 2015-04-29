@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../libs/angular.js"></script>
+</head>
+<script>
+    function test($scope){
+        var cusList = [{name:'영희',age:10},{name:'성규',age:20}];
+        var youngList =[];
+        $scope.cusList = cusList;
+        $scope.youngList = youngList;
+
+        angular.forEach(cusList,function(value,key){
+            if(Number(value.age) < 18){
+                youngList.push(value);
+            }
+        });
+
+    }
+</script>
+<body ng-controller="test">
+<h1>고객 목록</h1>
+<div>
+<ul>
+    <li ng-repeat="cus in cusList">
+        [{{$index +1}}] 고객 이름 : {{cus.name}} , 고객 나이 : {{cus.age}}
+    </li>
+</ul>
+</div>
+<div>
+    <ul>
+        <li ng-repeat="cus in youngList">
+            [{{$index +1}}] 고객 이름 : {{cus.name}} , 고객 나이 : {{cus.age}}
+        </li>
+    </ul>
+
+</div>
+</body>
+</html>
