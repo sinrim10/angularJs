@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="factoryApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../libs/angular-1.3.15/angular.js"></script>
+    <script>
+        var myApp = angular.module('factoryApp',[]);
+        myApp.factory('AppNm',[function(){
+            return 'demo App';
+        }]);
+        myApp.factory('UserResource',function(){
+            var userList = [];
+            return {
+                addUser : function(newUser){
+                    userList.push(newUser);
+                },
+                updateUser : function(idx, updatedUser){
+                    userList[idx] = updatedUser;
+                },
+                deleteUser : function(idx){
+                    userList[idx] = undefined;
+                },
+                selectUsers : function(){
+                    return userList;
+                }
+            }
+        });
+        myApp.controller('userCtrl',['$scope',"AppNm","UserResource",function($scope,AppNm,UserResource){
+            $scope.appNm = AppNm;
+            $scope.users = UserResource.selectUsers();
+            $scope.update = function(idx,updatedUser){
+                UserResource.updateUser(idx,updatedUser);
+            }
+            $scope.del = function(idx){
+                UserResource.deleteUser(idx);
+            }
+            $scope.addNewUser = function(newUser){
+                UserResource.addUser({
+                    name: newUser.name,
+                    email : newUser.email
+                })
+            }
+        }]);
+    </script>
+</head>
+<body ng-controller="userCtrl">
+    <p>어플리케이션 이름 : {{appNm}}</p>
+    <div>
+        이름 : <input type="text" ng-model="new.name"> <br>
+        이메일 : <input type="text" ng-model="new.email"><br>
+        <button ng-click="addNewUser(new)">Add New User</button>
+    </div>
+    <ul>
+        <li ng-repeat="upd in users track by $index" ng-if="upd">
+            <input type="text" ng-model="upd.name">,<input type="text" ng-model="upd.email">
+            <input type="button" ng-click="update($index,upd)" value="수정">
+            <input type="button" ng-click="del($index)" value="삭제">
+        </li>
+    </ul>
+    <ul>
+        <li ng-repeat="user in users track by $index" ng-if="user">
+            {{user.name}} , {{user.email}}
+        </li>
+    </ul>
+</body>
+</html>

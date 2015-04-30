@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html ng-app="serviceApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../libs/angular-1.3.15/angular.js"></script>
+    <script type="text/javascript">
+        function Calculator($log){
+            this.lastValue = 0;
+
+            this.add = function(a,b) {
+                var returnV = Number(a)+Number(b);
+                this.lastValue = returnV;
+                $log.log("add:"+this.lastValue);
+                return returnV;
+            };
+            this.minus = function(a,b){
+                var returnV = a-b;
+                this.lastValue = returnV;
+                $log.log("minus:"+this.lastValue);
+                return returnV;
+            };
+            this.multiple = function(a,b){
+                var returnV = a*b;
+                this.lastValue = returnV;
+                return returnV;
+            };
+
+
+        }
+
+        var myApp = angular.module('serviceApp',[]);
+        myApp.factory('CalcByFac',['$log',function($log){
+            return new Calculator($log);
+        }]);
+        myApp.service('CalcBySer',Calculator);
+        myApp.controller('serviceCtrl',['$scope','CalcByFac','CalcBySer','$log',function($scope,CalcByFac,CalcBySer,$log){
+            $scope.calList = ['add','minus','multiple']
+            $scope.val1 = 0;
+            $scope.val2 = 0;
+            $scope.result = 0;
+            $scope.add = function (a,b){
+                $scope.result = CalcByFac.add(a,b);
+            };
+
+            $scope.minus = function(a,b){
+                $scope.result = CalcBySer.minus(a,b);
+            };
+            $log.log(CalcBySer.lastValue);
+        }]);
+    </script>
+    <style>
+        .box{
+            width: 100px;
+            height: 100px;
+            color: white;
+            background-color: black;
+        }
+    </style>
+</head>
+<body ng-controller="serviceCtrl">
+    <div>
+        <input type="text" ng-model="val1">,<input type="text" ng-model="val2">,
+        <select ng-model="calc" ng-options="cal for cal in calList" ng-required="true"></select>
+        <br>
+        <div ng-switch="calc">
+            <div ng-switch-when="add" class ='box' ng-mousedown="add(val1,val2)">{{calc}}</div>
+            <div ng-switch-when="minus" class ='box' ng-mousedown="minus(val1,val2)">{{calc}}</div>
+            <div ng-switch-when="multiple" class ='box'>{{calc}}</div>
+        </div>
+
+    </div>
+    <p>{{result}}</p>
+</body>
+</html>

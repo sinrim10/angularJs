@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="provideApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../libs/angular.js"></script>
+    <script type="text/javascript">
+        var myApp = angular.module('provideApp',[]);
+        myApp.provider('Logtest',[function(){
+            function Logger(msg){
+                if(checkNativeLogger){
+                    console.log(msg);
+                }
+            }
+            Logger.debug = function(msg){
+                if(checkNativeLogger){
+                    console.debug(msg);
+                }
+            };
+            Logger.info = function(msg){
+                if(checkNativeLogger){
+                    console.info(msg);
+                }
+            };
+
+            function checkNativeLogger(){
+                if(console){
+                    return true;
+                }
+                return false;
+            }
+
+            this.$get = [function(){
+                return Logger;
+            }]
+        }
+        ]);
+        myApp.controller('mainCtrl',function($scope,Logtest){
+            Logtest("console.log로 출력하는 로그 메세지");
+            Logtest.debug("console.debug 출력하는 로그 메세지");
+            Logtest.info("console.info 출력하는 로그 메세지");
+        })
+    </script>
+</head>
+
+<body ng-controller="mainCtrl">
+
+</body>
+</html>
